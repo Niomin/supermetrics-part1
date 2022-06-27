@@ -9,10 +9,12 @@ use Statistics\Dto\StatisticsTo;
 
 final class AverageNumberPerUser extends AbstractCalculator
 {
+    protected const UNITS = 'posts';
+
     /**
      * @var array<string, int>
      */
-    private array $numberPerUser;
+    private array $numberPerUser = [];
 
     /**
      * @inheritDoc
@@ -34,7 +36,9 @@ final class AverageNumberPerUser extends AbstractCalculator
         $totalPosts = array_sum($this->numberPerUser);
         $totalItems = count($this->numberPerUser);
 
-        return (new StatisticsTo())->setValue($totalPosts / $totalItems);
+        $value = 0 !== $totalItems ? round($totalPosts / $totalItems, 2) : 0;
+
+        return (new StatisticsTo())->setValue($value);
     }
 
     private function addPost(string $userId): void
