@@ -47,8 +47,8 @@ class StatisticsController extends Controller
      * @param StatisticsToExtractor $extractor
      */
     public function __construct(
-        StatisticsService $statsService,
-        SocialPostService $socialService,
+        StatisticsService     $statsService,
+        SocialPostService     $socialService,
         StatisticsToExtractor $extractor
     ) {
         $this->statsService  = $statsService;
@@ -62,11 +62,11 @@ class StatisticsController extends Controller
     public function indexAction(array $params)
     {
         try {
-            $date   = $this->extractDate($params);
-            $params = ParamsBuilder::reportStatsParams($date);
+            $date     = $this->extractDate($params);
+            $paramsTo = ParamsBuilder::buildParamsTo($date);
 
             $posts = $this->socialService->fetchPosts();
-            $stats = $this->statsService->calculateStats($posts, $params);
+            $stats = $this->statsService->calculateStats($posts, $paramsTo);
 
             $response = [
                 'stats' => $this->extractor->extract($stats, self::STAT_LABELS),

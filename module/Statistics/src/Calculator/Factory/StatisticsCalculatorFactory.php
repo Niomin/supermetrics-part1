@@ -4,22 +4,14 @@ namespace Statistics\Calculator\Factory;
 
 use Statistics\Calculator\CalculatorComposite;
 use Statistics\Calculator\CalculatorInterface;
-use Statistics\Calculator\StatisticCollector\AbstractCalculator;
 use Statistics\Calculator\StatisticCollector\AverageNumberPerUser;
 use Statistics\Calculator\StatisticCollector\AveragePostLength;
 use Statistics\Calculator\StatisticCollector\MaxPostLength;
 use Statistics\Calculator\StatisticCollector\TotalPostsPerWeek;
-use Statistics\Dto\ParamsTo;
 use Statistics\Enum\StatsEnum;
 
-/**
- * Class StatisticsCalculatorFactory
- *
- * @package Statistics\Calculator
- */
-class StatisticsCalculatorFactory
+final class StatisticsCalculatorFactory
 {
-
     private const CALCULATOR_CLASS_MAP = [
         StatsEnum::AVERAGE_POST_LENGTH          => AveragePostLength::class,
         StatsEnum::MAX_POST_LENGTH              => MaxPostLength::class,
@@ -27,29 +19,12 @@ class StatisticsCalculatorFactory
         StatsEnum::AVERAGE_POST_NUMBER_PER_USER => AverageNumberPerUser::class,
     ];
 
-    /**
-     * @param ParamsTo[] $parameters
-     *
-     * @return CalculatorInterface
-     */
-    public static function create(array $parameters): CalculatorInterface
+    public static function create(): CalculatorInterface
     {
         $calculator = new CalculatorComposite();
 
-        foreach ($parameters as $paramsTo) {
-            $statName = $paramsTo->getStatName();
-            if (!$paramsTo instanceof ParamsTo
-                || !array_key_exists($statName, self::CALCULATOR_CLASS_MAP)
-            ) {
-                continue;
-            }
-
-            $className = self::CALCULATOR_CLASS_MAP[$statName];
-            /** @var AbstractCalculator $child */
-            $child = new $className();
-            $child->setParameters($paramsTo);
-
-            $calculator->addChild($child);
+        foreach (self::CALCULATOR_CLASS_MAP as $className) {
+            $calculator->addChild(new $className());
         }
 
         return $calculator;

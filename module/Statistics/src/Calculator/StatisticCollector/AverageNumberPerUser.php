@@ -1,25 +1,24 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Statistics\Calculator\StatisticCollector;
 
 use SocialPost\Dto\SocialPostTo;
 use Statistics\Dto\StatisticsTo;
+use Statistics\Enum\StatsEnum;
 
-final class AverageNumberPerUser extends AbstractCalculator
+final class AverageNumberPerUser implements StatisticCollectorInterface
 {
-    protected const UNITS = 'posts';
+    private const UNITS = 'posts';
+    private const NAME  = StatsEnum::AVERAGE_POST_NUMBER_PER_USER;
 
     /**
      * @var array<string, int>
      */
     private array $numberPerUser = [];
 
-    /**
-     * @inheritDoc
-     */
-    protected function doAccumulate(SocialPostTo $postTo): void
+    public function accumulateData(SocialPostTo $postTo): void
     {
         if (null === $postTo->getAuthorId()) {
             return;
@@ -28,17 +27,17 @@ final class AverageNumberPerUser extends AbstractCalculator
         $this->addPost($postTo->getAuthorId());
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function doCalculate(): StatisticsTo
+    public function calculate(): StatisticsTo
     {
         $totalPosts = array_sum($this->numberPerUser);
         $totalItems = count($this->numberPerUser);
 
         $value = 0 !== $totalItems ? round($totalPosts / $totalItems, 2) : 0;
 
-        return (new StatisticsTo())->setValue($value);
+        return (new StatisticsTo())
+            ->setValue($value)
+            ->setUnits(self::UNITS)
+            ->setName(self::NAME);
     }
 
     private function addPost(string $userId): void

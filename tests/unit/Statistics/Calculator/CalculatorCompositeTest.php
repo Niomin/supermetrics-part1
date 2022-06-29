@@ -10,17 +10,19 @@ use SocialPost\Dto\SocialPostTo;
 use Statistics\Builder\ParamsBuilder;
 use Statistics\Calculator\CalculatorInterface;
 use Statistics\Calculator\Factory\StatisticsCalculatorFactory;
+use Statistics\Dto\ParamsTo;
 use Statistics\Dto\StatisticsTo;
 use Statistics\Enum\StatsEnum;
 
 final class CalculatorCompositeTest extends TestCase
 {
     private CalculatorInterface $calculator;
+    private ParamsTo            $paramsTo;
 
     protected function setUp(): void
     {
-        $params           = ParamsBuilder::reportStatsParams(new DateTime('2022-10-10'));
-        $this->calculator = StatisticsCalculatorFactory::create($params);
+        $this->paramsTo   = ParamsBuilder::buildParamsTo(new DateTime('2022-10-10'));
+        $this->calculator = StatisticsCalculatorFactory::create();
 
         parent::setUp();
     }
@@ -61,13 +63,15 @@ final class CalculatorCompositeTest extends TestCase
     {
         //must be filtered
         $this->calculator->accumulateData(
-            (new SocialPostTo())->setDate(new DateTime('2022-09-01'))
+            (new SocialPostTo())->setDate(new DateTime('2022-09-01')),
+            $this->paramsTo
         );
         $this->calculator->accumulateData(
             (new SocialPostTo())
                 ->setDate($date = new DateTime('2022-10-10'))
                 ->setAuthorId('shalan')
-                ->setText($text = 'lorem ipsum and blabla')
+                ->setText($text = 'lorem ipsum and blabla'),
+            $this->paramsTo
         );
 
         $statistics = $this->calculator->calculate();

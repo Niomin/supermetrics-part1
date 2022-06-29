@@ -4,26 +4,16 @@ namespace Statistics\Calculator\StatisticCollector;
 
 use SocialPost\Dto\SocialPostTo;
 use Statistics\Dto\StatisticsTo;
+use Statistics\Enum\StatsEnum;
 
-/**
- * Class LongestPostCalculator
- *
- * @package Statistics\Calculator
- */
-class MaxPostLength extends AbstractCalculator
+final class MaxPostLength implements StatisticCollectorInterface
 {
+    private const UNITS = 'characters';
+    private const NAME = StatsEnum::MAX_POST_LENGTH;
 
-    protected const UNITS = 'characters';
+    private int $maxPostLength = 0;
 
-    /**
-     * @var int
-     */
-    private $maxPostLength = 0;
-
-    /**
-     * @param SocialPostTo $postTo
-     */
-    protected function doAccumulate(SocialPostTo $postTo): void
+    public function accumulateData(SocialPostTo $postTo): void
     {
         $postLength = strlen($postTo->getText());
 
@@ -32,11 +22,11 @@ class MaxPostLength extends AbstractCalculator
         }
     }
 
-    /**
-     * @return StatisticsTo
-     */
-    protected function doCalculate(): StatisticsTo
+    public function calculate(): StatisticsTo
     {
-        return (new StatisticsTo())->setValue($this->maxPostLength);
+        return (new StatisticsTo())
+            ->setValue($this->maxPostLength)
+            ->setUnits(self::UNITS)
+            ->setName(self::NAME);
     }
 }

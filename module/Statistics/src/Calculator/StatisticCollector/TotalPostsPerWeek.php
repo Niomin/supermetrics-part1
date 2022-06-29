@@ -4,26 +4,19 @@ namespace Statistics\Calculator\StatisticCollector;
 
 use SocialPost\Dto\SocialPostTo;
 use Statistics\Dto\StatisticsTo;
+use Statistics\Enum\StatsEnum;
 
-/**
- * Class TotalPosts
- *
- * @package Statistics\Calculator
- */
-class TotalPostsPerWeek extends AbstractCalculator
+final class TotalPostsPerWeek implements StatisticCollectorInterface
 {
-
-    protected const UNITS = 'posts';
-
-    /**
-     * @var array
-     */
-    private $totals = [];
+    private const UNITS = 'posts';
+    private const NAME  = StatsEnum::TOTAL_POSTS_PER_WEEK;
 
     /**
-     * @param SocialPostTo $postTo
+     * @var array<string, int>
      */
-    protected function doAccumulate(SocialPostTo $postTo): void
+    private array $totals = [];
+
+    public function accumulateData(SocialPostTo $postTo): void
     {
         if (null === $postTo->getDate()) {
             return;
@@ -34,15 +27,15 @@ class TotalPostsPerWeek extends AbstractCalculator
         $this->totals[$key] = ($this->totals[$key] ?? 0) + 1;
     }
 
-    /**
-     * @return StatisticsTo
-     */
-    protected function doCalculate(): StatisticsTo
+    public function calculate(): StatisticsTo
     {
-        $stats = new StatisticsTo();
+        $stats = (new StatisticsTo())
+            ->setUnits(self::UNITS)
+            ->setName(self::NAME);
+
         foreach ($this->totals as $splitPeriod => $total) {
             $child = (new StatisticsTo())
-                ->setName($this->parameters->getStatName())
+                ->setName(self::NAME)
                 ->setSplitPeriod($splitPeriod)
                 ->setValue($total)
                 ->setUnits(self::UNITS);
