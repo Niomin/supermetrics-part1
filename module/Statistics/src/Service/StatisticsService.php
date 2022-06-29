@@ -31,21 +31,15 @@ class StatisticsService
         $this->factory = $factory;
     }
 
-    /**
-     * @param Traversable $posts
-     * @param ParamsTo[]  $params
-     *
-     * @return StatisticsTo
-     */
-    public function calculateStats(Traversable $posts, array $params): StatisticsTo
+    public function calculateStats(Traversable $posts, ParamsTo $paramsTo): StatisticsTo
     {
-        $calculator = $this->factory->create($params);
+        $calculator = $this->factory::create();
 
         foreach ($posts as $post) {
             if (!$post instanceof SocialPostTo) {
                 continue;
             }
-            $calculator->accumulateData($post);
+            $calculator->accumulateData($post, $paramsTo);
         }
 
         return $calculator->calculate();

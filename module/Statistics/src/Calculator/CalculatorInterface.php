@@ -3,6 +3,7 @@
 namespace Statistics\Calculator;
 
 use SocialPost\Dto\SocialPostTo;
+use Statistics\Dto\ParamsTo;
 use Statistics\Dto\StatisticsTo;
 
 /**
@@ -12,11 +13,10 @@ use Statistics\Dto\StatisticsTo;
  */
 interface CalculatorInterface
 {
-
     /**
      * @param SocialPostTo $postTo
      */
-    public function accumulateData(SocialPostTo $postTo): void;
+    public function accumulateData(SocialPostTo $postTo, ParamsTo $paramsTo): void;
 
     /**
      * @return StatisticsTo
