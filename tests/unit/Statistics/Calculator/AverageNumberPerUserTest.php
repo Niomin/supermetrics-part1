@@ -7,20 +7,19 @@ namespace Tests\unit\Statistics\Calculator;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use SocialPost\Dto\SocialPostTo;
-use Statistics\Calculator\AverageNumberPerUser;
 use Statistics\Dto\ParamsTo;
 use Statistics\Dto\StatisticsTo;
 use Statistics\Enum\StatsEnum;
 
 final class AverageNumberPerUserTest extends TestCase
 {
-    private AverageNumberPerUser $averageNumberPerUser;
+    private \Statistics\Calculator\StatisticCollector\AverageNumberPerUser $averageNumberPerUser;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->averageNumberPerUser = new AverageNumberPerUser();
+        $this->averageNumberPerUser = new \Statistics\Calculator\StatisticCollector\AverageNumberPerUser();
         $this->averageNumberPerUser->setParameters(
             (new ParamsTo())
                 ->setStartDate(new DateTime('first day of this month'))

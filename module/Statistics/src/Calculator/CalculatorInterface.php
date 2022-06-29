@@ -12,7 +12,6 @@ use Statistics\Dto\StatisticsTo;
  */
 interface CalculatorInterface
 {
-
     /**
      * @param SocialPostTo $postTo
      */

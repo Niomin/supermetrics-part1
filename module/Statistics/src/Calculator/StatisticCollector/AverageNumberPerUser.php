@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Statistics\Calculator;
+namespace Statistics\Calculator\StatisticCollector;
 
 use SocialPost\Dto\SocialPostTo;
 use Statistics\Dto\StatisticsTo;

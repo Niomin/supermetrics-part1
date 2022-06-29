@@ -3,6 +3,7 @@
 namespace Statistics\Calculator;
 
 use SocialPost\Dto\SocialPostTo;
+use Statistics\Calculator\StatisticCollector\StatisticCollectorInterface;
 use Statistics\Dto\StatisticsTo;
 
 /**
@@ -14,16 +15,11 @@ class CalculatorComposite implements CalculatorInterface
 {
 
     /**
-     * @var CalculatorInterface[]
+     * @var StatisticCollectorInterface[]
      */
     private $children = [];
 
-    /**
-     * @param CalculatorInterface $child
-     *
-     * @return CalculatorComposite
-     */
-    public function addChild(CalculatorInterface $child): self
+    public function addChild(StatisticCollectorInterface $child): self
     {
         $this->children[] = $child;
 

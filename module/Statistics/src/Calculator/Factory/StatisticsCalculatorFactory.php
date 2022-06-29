@@ -2,13 +2,13 @@
 
 namespace Statistics\Calculator\Factory;
 
-use Statistics\Calculator\AbstractCalculator;
-use Statistics\Calculator\AverageNumberPerUser;
-use Statistics\Calculator\AveragePostLength;
 use Statistics\Calculator\CalculatorComposite;
 use Statistics\Calculator\CalculatorInterface;
-use Statistics\Calculator\MaxPostLength;
-use Statistics\Calculator\TotalPostsPerWeek;
+use Statistics\Calculator\StatisticCollector\AbstractCalculator;
+use Statistics\Calculator\StatisticCollector\AverageNumberPerUser;
+use Statistics\Calculator\StatisticCollector\AveragePostLength;
+use Statistics\Calculator\StatisticCollector\MaxPostLength;
+use Statistics\Calculator\StatisticCollector\TotalPostsPerWeek;
 use Statistics\Dto\ParamsTo;
 use Statistics\Enum\StatsEnum;
 
